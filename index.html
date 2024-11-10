@@ -21,7 +21,7 @@
                 <div class="post">
                     <h2>${post.title}</h2>
                     <p>${post.content.slice(0, 100)}...</p>
-                    <a href="post.html?id=${index}">Leer más</a>
+                    <a href="post.html?id=${index + 1}">Leer más</a>
                     <button onclick="deletePost(${index})">Eliminar</button>
                 </div>
             `).join("");
