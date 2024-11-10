@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artículo</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+
+<body>
+    <h1 id="post-title">Cargando...</h1>
+    <p id="post-content"></p>
+    <a href="index.html">Regresar al Inicio</a>
+
+    <script>
+        // Función para obtener el ID del post desde la URL
+        function getPostIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("id");
+        }
+
+        // Cargar y mostrar el post
+        async function loadPost() {
+            const postId = getPostIdFromUrl();
+            if (postId !== null) {
+                const response = await fetch(`http://127.0.0.1:8000/posts/${postId}`);
+
+                if (response.ok) {
+                    const post = await response.json();
+                    document.getElementById("post-title").textContent = post.title;
+                    document.getElementById("post-content").textContent = post.content;
+                } else {
+                    document.getElementById("post-title").textContent = "Artículo no encontrado";
+                    document.getElementById("post-content").textContent = "";
+                }
+            } else {
+                document.getElementById("post-title").textContent = "ID de artículo no especificado";
+                document.getElementById("post-content").textContent = "";
+            }
+        }
+
+        loadPost();
+    </script>
+</body>
+
+</html>
