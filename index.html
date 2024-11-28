@@ -22,29 +22,40 @@
     <script type="module">
         import { API_URL } from './config.js';
 
+        // Función para cargar las tareas
         async function loadTasks() {
             const response = await fetch(`${API_URL}/posts`);
             const tasks = await response.json();
             const tasksDiv = document.getElementById("tasks");
             tasksDiv.innerHTML = tasks.map(task => `
-                <div class="flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow">
+                <div class="task flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow" data-id="${task.id}">
                     <div>
                         <h2 class="text-xl font-semibold">${task.title}</h2>
                         <p class="text-gray-400">${task.content}</p>
                     </div>
                     <div class="flex gap-2">
-                        <a href="task.html?id=${task.id}" class="text-blue-400 hover:underline">Editar</a>
-                        <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:underline">Eliminar</button>
+                        <a href="task.html?id=${task.id}" class="text-blue-400 hover:underline">Ver</a>
+                        <button class="delete-btn text-red-500 hover:underline">Eliminar</button>
                     </div>
                 </div>
             `).join("");
+
+            // Asignar eventos de clic a los botones "Eliminar"
+            document.querySelectorAll(".delete-btn").forEach(button => {
+                button.addEventListener("click", async function () {
+                    const taskId = this.closest(".task").dataset.id;
+                    await deleteTask(taskId);
+                });
+            });
         }
 
+        // Función para eliminar una tarea
         async function deleteTask(taskId) {
             await fetch(`${API_URL}/posts/${taskId}`, { method: "DELETE" });
-            loadTasks();
+            loadTasks(); // Recargar la lista después de eliminar
         }
 
+        // Cargar las tareas al inicio
         loadTasks();
     </script>
 </body>
