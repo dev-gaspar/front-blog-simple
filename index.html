@@ -4,39 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diario Digital</title>
+    <title>Lista de Tareas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="config.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-800 p-6">
-    <h1 class="text-4xl font-bold text-center mb-6">Últimos Artículos</h1>
-    <a href="create_post.html" class="block text-center mb-4 text-blue-500 hover:underline">Publicar Nuevo Artículo</a>
-    <div id="posts" class="grid gap-4"></div>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-6">
+    <header class="text-center mb-8">
+        <h1 class="text-4xl font-bold">Lista de Tareas</h1>
+        <a href="create_task.html" class="mt-4 inline-block text-blue-400 hover:text-blue-300 underline">Agregar Nueva
+            Tarea</a>
+    </header>
+    <main class="max-w-3xl mx-auto">
+        <div id="tasks" class="grid gap-4"></div>
+    </main>
 
     <script type="module">
         import { API_URL } from './config.js';
 
-        async function loadPosts() {
+        async function loadTasks() {
             const response = await fetch(`${API_URL}/posts`);
-            const posts = await response.json();
-            const postsDiv = document.getElementById("posts");
-            postsDiv.innerHTML = posts.map(post => `
-                <div class="p-4 bg-white rounded shadow">
-                    <h2 class="text-xl font-bold">${post.title}</h2>
-                    <p class="text-gray-700">${post.content.slice(0, 100)}...</p>
-                    <a href="post.html?id=${post.id}" class="text-blue-500 hover:underline">Leer más</a>
-                    <button onclick="deletePost('${post.id}')" class="mt-2 text-red-500 hover:underline">Eliminar</button>
+            const tasks = await response.json();
+            const tasksDiv = document.getElementById("tasks");
+            tasksDiv.innerHTML = tasks.map(task => `
+                <div class="flex justify-between items-center bg-gray-800 p-4 rounded-lg shadow">
+                    <div>
+                        <h2 class="text-xl font-semibold">${task.title}</h2>
+                        <p class="text-gray-400">${task.content}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="task.html?id=${task.id}" class="text-blue-400 hover:underline">Editar</a>
+                        <button onclick="deleteTask('${task.id}')" class="text-red-500 hover:underline">Eliminar</button>
+                    </div>
                 </div>
             `).join("");
         }
 
-        async function deletePost(postId) {
-            await fetch(`${API_URL}/posts/${postId}`, { method: "DELETE" });
-            loadPosts();
+        async function deleteTask(taskId) {
+            await fetch(`${API_URL}/posts/${taskId}`, { method: "DELETE" });
+            loadTasks();
         }
 
-        loadPosts();
+        loadTasks();
     </script>
 </body>
 

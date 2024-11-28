@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Tarea</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="config.js"></script>
+</head>
+
+<body class="bg-gray-900 text-gray-200 flex items-center justify-center min-h-screen">
+    <form id="taskForm" class="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Nueva Tarea</h1>
+        <label for="title" class="block text-sm font-medium mb-1">Título</label>
+        <input type="text" name="title" id="title"
+            class="w-full mb-4 p-2 bg-gray-700 text-gray-200 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required>
+
+        <label for="content" class="block text-sm font-medium mb-1">Descripción</label>
+        <textarea name="content" id="content"
+            class="w-full mb-4 p-2 bg-gray-700 text-gray-200 border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required></textarea>
+
+        <button type="submit"
+            class="w-full bg-blue-500 py-2 px-4 rounded hover:bg-blue-600 text-gray-100 font-semibold">Guardar
+            Tarea</button>
+    </form>
+
+    <script type="module">
+        import { API_URL } from './config.js';
+
+        document.getElementById("taskForm").onsubmit = async function (event) {
+            event.preventDefault();
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+
+            await fetch(`${API_URL}/posts`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content })
+            });
+            window.location.href = "index.html";
+        };
+    </script>
+</body>
+
+</html>
